@@ -1,5 +1,10 @@
+/**
+ * Constant values used in the app.
+ */
+
 const CONSTANTS = {
   RESIZE_CONSTRAINTS: { MIN_SIZE: 20 },
+  TEXT_LAYER: { WIDTH: '100', HEIGHT: '60', X: '10', Y: '30' },
   FILTER_TYPE: {
     ORIGINAL: 'original',
     SEPIA: 'sepia',

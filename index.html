@@ -17,17 +17,25 @@
           <div class="tools-container">
             <ul class="menu-bar">
               <li>
-                <a href="#" id="newEditor" title="New Editor"><img src="images/new-editor.png"/></a>
+                <a href="#" id="newEditor" title="New Editor"
+                  ><img src="images/new-editor.png" /><span>New File</span>
+                </a>
               </li>
               <li>
-                <a href="#" id="uploadBtn" title="Add Image"><img src="images/add-image2.png"/></a>
+                <a href="#" id="uploadBtn" title="Add Image"
+                  ><img src="images/add-image2.png" /><span>Add Image</span>
+                </a>
               </li>
               <input style="display: none;" type="file" id="fileInputBtn" />
               <li>
-                <a href="#" id="saveBtn" title="Export"><img src="images/save.png"/></a>
+                <a href="#" id="saveBtn" title="Export"
+                  ><img src="images/save.png" /><span>Export png</span>
+                </a>
               </li>
               <li>
-                <a href="#" id="addTextBtn" title="Add Text"><img src="images/add-text2.png"/></a>
+                <a href="#" id="addTextBtn" title="Add Text"
+                  ><img src="images/add-text2.png" /><span>Add Text</span></a
+                >
               </li>
             </ul>
           </div>
@@ -42,6 +50,55 @@
     <div id="all-layers clear-fix" class="all-layers">
       <h4 class="all-layers-heading-span">Layers</h4>
       <div class="all-layers-body" id="layerBody"></div>
+    </div>
+
+    <div class="control-box" id="image_control">
+      <button title="rotate-left">
+        <img src="images/rotate-left.png" class="default" />
+      </button>
+      <button title="rotate-right">
+        <img src="images/rotate-right.png" class="default" />
+      </button>
+      <button title="flip">
+        <img src="images/flip.png" class="default" />
+      </button>
+      <button title="crop">
+        <img src="images/crop.png" class="default" />
+      </button>
+      <div style="float:left">
+        <div class="heading-span">Filters</div>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> original</span></a>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> Grayscale</span></a>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> Sepia</span></a>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> Claredon</span></a>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> Lark</span></a>
+        <a><img /><span style="font-weight:bold;font-size:11px;"> Moon</span></a>
+      </div>
+      <div style="float: left;">
+        <div class="heading-span manipulators">Manipulators</div>
+        <div style="float: left; overflow: auto; height: 115px;">
+          <div style="text-align: center; float: left;">
+            <h4 class="slider-name">Brightness</h4>
+            <input type="range" min="-20" max="20" value="0" class="sliders" />
+          </div>
+          <div style="text-align: center; float: left;">
+            <h4 class="slider-name">Contrast</h4>
+            <input type="range" min="-10" max="10" value="0" class="sliders" />
+          </div>
+          <div style="text-align: center; float: left;">
+            <h4 class="slider-name">Gamma</h4>
+            <input type="range" min="0" max="200" value="100" class="sliders" />
+          </div>
+          <div style="text-align: center; float: left;">
+            <h4 class="slider-name">Temperature</h4>
+            <input type="range" min="-25" max="25" value="0" class="sliders" />
+          </div>
+          <div style="text-align: center; float: left;">
+            <h4 class="slider-name">Vibrance</h4>
+            <input type="range" min="-50" max="50" value="0" class="sliders" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="js/main.js"></script>

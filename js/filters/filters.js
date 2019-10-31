@@ -1,4 +1,9 @@
 import CONSTANTS from '../Constants.js';
+
+/**
+ * @summary: Class that handles all the filter actions.
+ * @class Filter
+ */
 class Filter {
   changes;
   constructor(imageData) {
@@ -6,28 +11,48 @@ class Filter {
     this.changes = {};
   }
 
+  /**
+   * @summary: Makes copy of the provided imageData by using different references.
+   * @param {Uint8Array} imageData - array of pixels of image.
+   * @returns {Uint8Array} - array of pixels of image
+   * @memberof Filter
+   */
   makeCopy(imageData) {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
     canvas.width = imageData.width;
     canvas.height = imageData.height;
     ctx.putImageData(imageData, 0, 0);
     return ctx.getImageData(0, 0, canvas.width, canvas.height);
   }
 
+  /**
+   * @summary: Get the filtered image
+   * @param {String} filterType - name of the filter
+   * @param {boolean} original - true if original image is requested
+   * @returns {image} filtered image
+   * @memberof Filter
+   */
   getImage(filterType, original) {
     const imageData = this.getFilteredImageData(filterType, original);
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
     canvas.width = imageData.width;
     canvas.height = imageData.height;
     ctx.putImageData(imageData, 0, 0);
 
-    var image = new Image();
+    let image = new Image();
     image.src = canvas.toDataURL();
     return image;
   }
 
+  /**
+   * @summary: Applies filter to the editedImage using given filter type.
+   * @param {String} filterType - name of the filter
+   * @param {boolean} original - true if original image is requested
+   * @returns (Uint8Array) - filtered imageData
+   * @memberof Filter
+   */
   getFilteredImageData(filterType, original) {
     let editedImage;
     if (original) {
@@ -40,12 +65,19 @@ class Filter {
     return this.applyFilter(editedImage, filterType);
   }
 
+  /**
+   * @summary: Applies filter to the image data by using filterType provided.
+   * @param {Uint8Array} image - imageData to be filtered
+   * @param {String} filterType - name of the filter to be applied
+   * @returns {Uint8Array} - filteredImageData
+   * @memberof Filter
+   */
   applyFilter(image, filterType) {
     let data = image.data;
-    let weights;
 
     switch (filterType) {
       case CONSTANTS.FILTER_TYPE.SEPIA:
+        // Pixel Manipulation for Sepia filter effect.
         for (var i = 0; i < data.length; i += 4) {
           var inputRed = data[i];
           var inputGreen = data[i + 1];
@@ -57,14 +89,11 @@ class Filter {
 
         break;
       case CONSTANTS.FILTER_TYPE.GRAYSCALE:
+        // Pixel Manipulation for Grayscale filter effect.
         for (var i = 0; i < data.length; i += 4) {
           var inputRed = data[i];
           var inputGreen = data[i + 1];
           var inputBlue = data[i + 2];
-          // data[i] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
-          // data[i + 1] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
-          // data[i + 2] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
-
           data[i] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
           data[i + 1] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
           data[i + 2] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
@@ -87,12 +116,28 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: get image data after pixel manipulation using the manipulator sliders.
+   * @param {number} sliderValue - value of the manipulator slider
+   * @param {String} sliderName - name of the manipulator slider
+   * @returns (Uint8Array)-manipulated image data
+   * @memberof Filter
+   */
   getManipulatedImageData(sliderValue, sliderName) {
     const editedImage = this.getChangedImage(sliderValue);
     this.recordChanges(sliderName, sliderValue);
     return this.manipulate(editedImage, sliderValue, sliderName);
   }
 
+  /**
+   * @summary:
+   * Applies pixel manipulation on given image data as per the manipulator name, slider value.
+   * @param {Uint8Array} image - Image data to be manipulated
+   * @param {number} sliderValue - value of the slider input.
+   * @param {String} sliderName - name of the manipulator slider
+   * @returns (Uint8Array)-manipulated image data
+   * @memberof Filter
+   */
   manipulate(image, sliderValue, sliderName) {
     switch (sliderName) {
       case CONSTANTS.BRIGHTNESS.SLIDER_NAME:
@@ -120,10 +165,22 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Record the changes applied on the image
+   * @param {String} name - change applied (slider name)
+   * @param {number} value - value of the change applied (slider value)
+   * @memberof Filter
+   */
   recordChanges(name, value) {
     this.changes[name] = value;
   }
 
+  /**
+   * @summary: Get the changed image with all applied changes.
+   * @param {String} ignoreEffect - Effect to be ignored.
+   * @returns (Uint8Array) - imageData with all applied changes
+   * @memberof Filter
+   */
   getChangedImage(ignoreEffect) {
     let copy = this.makeCopy(this.imageData);
     if (this.changes === {}) {
@@ -144,50 +201,57 @@ class Filter {
     return copy;
   }
 
-  convolute(imageData, width, height, weights, opaque) {
-    let weightsLength = Math.round(Math.sqrt(weights.length));
-    let halfSide = Math.floor(weightsLength / 2);
-    let sw = width;
-    let sh = height;
-    //pad output by the convolution matrix
-    let w = width;
-    let h = height;
-    //go through the destination image pixels
-    let alphaFactor = opaque ? 1 : 0;
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
-        let sy = y;
-        let sx = x;
-        let dstOff = (y * w + x) * 4;
-        //calculate weighted sum of the source image pixels
-        //that fall under the convolution matrix
-        let r = 0,
-          g = 0,
-          b = 0,
-          a = 0;
-        for (let cy = 0; cy < weightsLength; cy++) {
-          for (let cx = 0; cx < weightsLength; cx++) {
-            let scy = sy + cy - halfSide;
-            let scx = sx + cx - halfSide;
-            if (scy >= 0 && scy < sh && scx >= 0 && scx < sw) {
-              let srcOff = (scy * sw + scx) * 4;
-              let wt = weights[cy * weightsLength + cx];
-              r += imageData[srcOff] * wt;
-              g += imageData[srcOff + 1] * wt;
-              b += imageData[srcOff + 2] * wt;
-              a += imageData[srcOff + 3] * wt;
-            }
-          }
-        }
-        imageData[dstOff] = r;
-        imageData[dstOff + 1] = g;
-        imageData[dstOff + 2] = b;
-        imageData[dstOff + 3] = a + alphaFactor * (255 - a);
-      }
-    }
-    return imageData;
-  }
+  // convolute(imageData, width, height, weights, opaque) {
+  //   let weightsLength = Math.round(Math.sqrt(weights.length));
+  //   let halfSide = Math.floor(weightsLength / 2);
+  //   let sw = width;
+  //   let sh = height;
+  //   //pad output by the convolution matrix
+  //   let w = width;
+  //   let h = height;
+  //   //go through the destination image pixels
+  //   let alphaFactor = opaque ? 1 : 0;
+  //   for (let y = 0; y < h; y++) {
+  //     for (let x = 0; x < w; x++) {
+  //       let sy = y;
+  //       let sx = x;
+  //       let dstOff = (y * w + x) * 4;
+  //       //calculate weighted sum of the source image pixels
+  //       //that fall under the convolution matrix
+  //       let r = 0,
+  //         g = 0,
+  //         b = 0,
+  //         a = 0;
+  //       for (let cy = 0; cy < weightsLength; cy++) {
+  //         for (let cx = 0; cx < weightsLength; cx++) {
+  //           let scy = sy + cy - halfSide;
+  //           let scx = sx + cx - halfSide;
+  //           if (scy >= 0 && scy < sh && scx >= 0 && scx < sw) {
+  //             let srcOff = (scy * sw + scx) * 4;
+  //             let wt = weights[cy * weightsLength + cx];
+  //             r += imageData[srcOff] * wt;
+  //             g += imageData[srcOff + 1] * wt;
+  //             b += imageData[srcOff + 2] * wt;
+  //             a += imageData[srcOff + 3] * wt;
+  //           }
+  //         }
+  //       }
+  //       imageData[dstOff] = r;
+  //       imageData[dstOff + 1] = g;
+  //       imageData[dstOff + 2] = b;
+  //       imageData[dstOff + 3] = a + alphaFactor * (255 - a);
+  //     }
+  //   }
+  //   return imageData;
+  // }
 
+  /**
+   * @summary: Apply brightness manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of brightness slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with brightness manipulation applied.
+   * @memberof Filter
+   */
   getBrightness(sliderValue, image) {
     let data = image.data;
     let factor = CONSTANTS.BRIGHTNESS.FACTOR * sliderValue;
@@ -203,6 +267,13 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Apply contrast manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of contrast slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with contrast manipulation applied.
+   * @memberof Filter
+   */
   getContrast(sliderValue, image) {
     let data = image.data;
     let contrast = sliderValue * CONSTANTS.CONTRAST.FACTOR * 2.55;
@@ -216,6 +287,13 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Apply Saturation manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of saturation slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with saturation manipulation applied.
+   * @memberof Filter
+   */
   getSaturation(sliderValue, image) {
     let data = image.data;
     let RW = 0.299;
@@ -231,7 +309,7 @@ class Filter {
     let g = sBar * RB;
     let h = sBar * RB;
     let itemp = sBar * RB + sliderValue;
-    for (var i = 0; i < data.length; i += 4) {
+    for (let i = 0; i < data.length; i += 4) {
       let inputRed = data[i];
       let inputGreen = data[i + 1];
       let inputBlue = data[i + 2];
@@ -242,6 +320,13 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Apply gamma manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of gamma slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with gamma manipulation applied.
+   * @memberof Filter
+   */
   getGamma(sliderValue, image) {
     let correctionFactor = Math.round((100 / sliderValue) * 10) / 10;
     let data = image.data;
@@ -253,6 +338,13 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Apply temperature manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of temperature slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with temperature manipulation applied.
+   * @memberof Filter
+   */
   getTemperature(sliderValue, image) {
     let factor = CONSTANTS.TEMPERATURE.FACTOR * sliderValue;
     let data = image.data;
@@ -268,6 +360,13 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Apply vibrance manipulation on the pixels of the given image data.
+   * @param {number} sliderValue - value of vibrance slider input
+   * @param {Uint8Array} image - imagedata to be manipulated.
+   * @returns (Uint8Array) - imagedata with vibrance manipulation applied.
+   * @memberof Filter
+   */
   getVibrance(sliderValue, image) {
     let data = image.data;
     let factor = CONSTANTS.VIBRANCE.FACTOR * sliderValue;
@@ -285,14 +384,32 @@ class Filter {
     return image;
   }
 
+  /**
+   * @summary: Obtain Moon filter by applying brightness and saturation manipulation.
+   * @param {Uint8Array} image - image data to be filtered
+   * @returns (Uint8Array) - flitered image data
+   * @memberof Filter
+   */
   getMoonFilter(image) {
     return this.getSaturation(0, this.getBrightness(33.5, image));
   }
 
+  /**
+   * @summary: Obtain Claredon filter by applying brightness,contrast and saturation manipulation.
+   * @param {Uint8Array} image - image data to be filtered
+   * @returns (Uint8Array) - flitered image data
+   * @memberof Filter
+   */
   getClaredonFilter(image) {
     return this.getSaturation(1.25, this.getContrast(14, this.getBrightness(18.5, image)));
   }
 
+  /**
+   * @summary: Obtain Lark filter by applying brightness, contrast, saturation and gamma manipulation.
+   * @param {Uint8Array} image - image data to be filtered
+   * @returns (Uint8Array) - flitered image data
+   * @memberof Filter
+   */
   getLarkFilter(image) {
     return this.getGamma(
       0.57,

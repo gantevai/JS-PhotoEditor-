@@ -1,5 +1,11 @@
 import CONSTANTS from './Constants.js';
 
+/**
+ * @summary:
+ * Class that is used to create canvas element in the DOM
+ * And also handle its functions.
+ * @class CanvasElement
+ */
 class CanvasElement {
   constructor(container, isCrop) {
     this.container = container;
@@ -9,8 +15,18 @@ class CanvasElement {
     this.makeDraggable();
     this.makeResizable();
     this.createImageCopy();
+
+    this.element.addEventListener('click', e => {
+      if (e.ctrlKey) {
+        this.saveSingleImage();
+      }
+    });
   }
 
+  /**
+   * @summary: Initializes the variables.
+   * @memberof CanvasElement
+   */
   init() {
     this.imageState = [
       {
@@ -29,22 +45,40 @@ class CanvasElement {
     this.context = null; // variable for canvas context
   }
 
+  /**
+   * @summary: Creates the canvas element in the DOM along with resizers.
+   * @param {boolean} isCrop - true if canvas element is used for crop.
+   * @memberof CanvasElement
+   */
   createElement(isCrop) {
     this.createResizableDiv();
     this.createResizers();
     this.createCanvas(isCrop);
   }
 
+  /**
+   * @summary: Change z-index of the canvas element.
+   * @param {number} zIndex - value to be put as z index.
+   * @memberof CanvasElement
+   */
   changeZIndex(zIndex) {
     this.element.style.zIndex = zIndex;
   }
 
+  /**
+   * @summary: Create the resizable div in the DOM which helps in canvas resizing.
+   * @memberof CanvasElement
+   */
   createResizableDiv() {
     this.resizable = document.createElement('div');
     this.resizable.classList.add('resizable');
     this.container.appendChild(this.resizable);
   }
 
+  /**
+   * @summary: Create the resizers in the DOM which helps in canvas resizing.
+   * @memberof CanvasElement
+   */
   createResizers() {
     this.resizers = document.createElement('div');
     this.resizers.classList.add('resizers');
@@ -72,6 +106,11 @@ class CanvasElement {
     this.resizerArray.push(this.resizerBottomRight);
   }
 
+  /**
+   * @summary: Create the canvas in the DOM and style it.
+   * @param {*} isCrop
+   * @memberof CanvasElement
+   */
   createCanvas(isCrop) {
     this.element = document.createElement('canvas');
     this.element.style.position = 'absolute';
@@ -84,6 +123,12 @@ class CanvasElement {
     this.context = this.element.getContext('2d');
   }
 
+  /**
+   * @summary: Set the size of the canvas element.
+   * @param {number} [width=this.container.offsetWidth] - uses containers width as default width.
+   * @param {number} [height=this.container.offsetHeight] - uses containers height as default height.
+   * @memberof CanvasElement
+   */
   setCanvasSize(width = this.container.offsetWidth, height = this.container.offsetHeight) {
     this.element.style.width = this.resizable.style.width = width + 'px';
     this.element.width = width;
@@ -91,6 +136,11 @@ class CanvasElement {
     this.element.style.height = this.resizable.style.height = height + 'px';
   }
 
+  /**
+   * @summary : Used as getter function to get canvas size and position.
+   * @returns (object)- { positionX, positionY, width, height}
+   * @memberof CanvasElement
+   */
   getCanvasSize() {
     return {
       positionX: this.resizable.offsetLeft - this.container.offsetLeft,
@@ -100,22 +150,45 @@ class CanvasElement {
     };
   }
 
+  /**
+   * @summary: Used to obtain context of the canvas.
+   * @returns (context)- context of canvas.
+   * @memberof CanvasElement
+   */
   getContext() {
     return this.context;
   }
 
+  /**
+   * @summary: Used to obtain canvas element reference.
+   * @returns (reference)- canvas element.
+   * @memberof CanvasElement
+   */
   getCanvas() {
     return this.element;
   }
 
+  /**
+   * @summary: Used to obtain old image reference.
+   * @returns (reference)- old image of canvas.
+   * @memberof CanvasElement
+   */
   getOldImage() {
     return this.oldImage;
   }
 
+  /**
+   * @summary: Clears the canvas.
+   * @memberof CanvasElement
+   */
   clearCanvas() {
     this.context.clearRect(0, 0, this.resizable.offsetWidth, this.resizable.offsetHeight);
   }
 
+  /**
+   * @summary: Displays the resizers of a canvas.
+   * @memberof CanvasElement
+   */
   showresizable() {
     this.resizers.style.display = 'block';
     this.resizerTopLeft.style.display = 'block';
@@ -124,6 +197,10 @@ class CanvasElement {
     this.resizerBottomRight.style.display = 'block';
   }
 
+  /**
+   * @summary:Hides the resizers of a canvas.
+   * @memberof CanvasElement
+   */
   hideresizable() {
     this.resizers.style.display = 'none';
     this.resizerTopLeft.style.display = 'none';
@@ -132,6 +209,12 @@ class CanvasElement {
     this.resizerBottomRight.style.display = 'none';
   }
 
+  /**
+   * @summary:
+   * Adjusts the size of canvas according to the image aspect ratio and the height of editing container.
+   * @param {img} image - image uploaded by user.
+   * @memberof CanvasElement
+   */
   handleCanvasSize(image) {
     var imgWidth = image.width;
     var imgHeight = image.height;
@@ -146,6 +229,10 @@ class CanvasElement {
     this.context.drawImage(image, 0, 0, this.element.width, this.element.height);
   }
 
+  /**
+   * @summary: Make the canvas draggable around the editor window.
+   * @memberof CanvasElement
+   */
   makeDraggable() {
     var moveBoxBind;
     const imageState = this.imageState[0];
@@ -163,13 +250,19 @@ class CanvasElement {
       window.addEventListener('mouseup', stopMoveBox.bind(this));
     });
 
+    /**
+     * @summary:
+     * Function that runs when mouse down event occurs on canvas.
+     * Takes the initial position of canvas and the initial mouse click position.
+     * And updates the position of canvas when the mouse position is moved.
+     * @param {event} e
+     */
     function moveBox(e) {
-      const mousePointDistFromBoxPositionX = imageState.original_mouse_x - imageState.original_x;
-      const mousePointDistFromBoxPositionY = imageState.original_mouse_y - imageState.original_y;
-      const newBoxPositionX = e.pageX - mousePointDistFromBoxPositionX;
-      const newBoxPositionY = e.pageY - mousePointDistFromBoxPositionY;
-
       if (this.isCrop) {
+        const mousePointDistFromBoxPositionX = imageState.original_mouse_x - imageState.original_x;
+        const mousePointDistFromBoxPositionY = imageState.original_mouse_y - imageState.original_y;
+        const newBoxPositionX = e.pageX - mousePointDistFromBoxPositionX;
+        const newBoxPositionY = e.pageY;
         if (
           newBoxPositionX >= this.container.offsetLeft &&
           newBoxPositionX + this.element.offsetWidth <=
@@ -184,11 +277,14 @@ class CanvasElement {
           newBoxPositionY + this.element.offsetHeight <=
             this.container.offsetTop + this.container.offsetHeight
         ) {
-          console.log(newBoxPositionY);
           this.resizable.style.top = newBoxPositionY - this.container.offsetTop + 'px';
           this.element.style.top = 0;
         }
       } else {
+        const mousePointDistFromBoxPositionX = imageState.original_mouse_x - imageState.original_x;
+        const mousePointDistFromBoxPositionY = imageState.original_mouse_y - imageState.original_y;
+        const newBoxPositionX = e.pageX - mousePointDistFromBoxPositionX;
+        const newBoxPositionY = e.pageY - mousePointDistFromBoxPositionY;
         if (
           newBoxPositionX >= this.container.offsetLeft &&
           newBoxPositionX + this.element.offsetWidth <=
@@ -206,27 +302,27 @@ class CanvasElement {
           this.element.style.top = 0;
         }
       }
-
-      if (
-        newBoxPositionY >= this.container.offsetTop &&
-        newBoxPositionY + this.element.offsetHeight <=
-          this.container.offsetTop + this.container.offsetHeight
-      ) {
-        this.resizable.style.top = newBoxPositionY + 'px';
-        this.element.style.top = 0;
-      }
     }
 
+    /**
+     * @summary: Function that runs when mouse up event is triggered.
+     * Removes the mousemove eventlistener.
+     * @param {event} e
+     */
     function stopMoveBox(e) {
       window.removeEventListener('mousemove', moveBoxBind);
     }
   }
 
+  /**
+   * @summary: makes the canvas resizable.
+   * @memberof CanvasElement
+   */
   makeResizable() {
-    var resizeBind, stopResizeBind;
+    let resizeBind, stopResizeBind;
     const imageState = this.imageState[0];
 
-    for (var i = 0; i < this.resizerArray.length; i++) {
+    for (let i = 0; i < this.resizerArray.length; i++) {
       const currentResizer = this.resizerArray[i];
       currentResizer.addEventListener('mousedown', e => {
         if (!this.sourceImageCopied) {
@@ -256,6 +352,10 @@ class CanvasElement {
         window.addEventListener('mouseup', stopResizeBind);
       });
 
+      /**
+       * @summary: Resizes the canvas when the resizer is dragged.
+       * @param {event} e
+       */
       function resize(e) {
         if (currentResizer.classList.contains('bottom-right-resizer')) {
           const width = imageState.original_width + (e.pageX - imageState.original_mouse_x);
@@ -336,6 +436,10 @@ class CanvasElement {
         }
       }
 
+      /**
+       * @summary: Stops resizing on mouse up and removes the mousemove event listener.
+       * @param {event} e
+       */
       function stopResize(e) {
         window.removeEventListener('mousemove', resizeBind);
         this.resizeImage();
@@ -344,6 +448,10 @@ class CanvasElement {
     }
   }
 
+  /**
+   * @summary: Adjusts the old image into the newly resized canvas.
+   * @memberof CanvasElement
+   */
   resizeImage() {
     this.setCanvasSize(this.resizable.offsetWidth, this.resizable.offsetHeight);
     this.context.drawImage(
@@ -359,6 +467,13 @@ class CanvasElement {
     );
   }
 
+  /**
+   * @summary:
+   * Creates a copy of the original image as old image if original image is provided.
+   * Creates copy of the image in the canvas as old image if original image is not provided.
+   * @param {image} originalImage - original image uploaded by user.
+   * @memberof CanvasElement
+   */
   createImageCopy(originalImage) {
     if (originalImage) {
       this.oldImage = originalImage;
@@ -369,13 +484,24 @@ class CanvasElement {
     }
   }
 
-  // changeSourceImageCopied() {
-  //   if (this.sourceImageCopied) this.sourceImageCopied = false;
-  //   else this.sourceImageCopied = true;
-  // }
-
+  /**
+   * @summary: Destroys the canvas from DOM.
+   * @memberof CanvasElement
+   */
   destroy() {
     this.resizable.remove();
+  }
+
+  /**
+   * @summary: Save a single canvas layer as .png on ctrl + mouseclick
+   * @memberof CanvasElement
+   */
+  saveSingleImage() {
+    let image = this.element.toDataURL();
+    let a = document.createElement('a');
+    a.href = image;
+    a.download = 'image.png';
+    a.click();
   }
 }
 

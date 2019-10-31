@@ -1,5 +1,10 @@
 import Control from './control.js';
 
+/**
+ * @summary: Class that handles control buttons for text layer
+ * @class TextControl
+ * @extends {Control}
+ */
 class TextControl extends Control {
   constructor(layer, fontStyle, allLayers, layerContainer) {
     super(layer);
@@ -8,7 +13,11 @@ class TextControl extends Control {
     this.index = this.allLayers.indexOf(layer);
     this.init(fontStyle);
   }
-
+  /**
+   * @summary: initialize
+   * @param {Object} fontStyle - Object containing information on the font family,size,etc.
+   * @memberof TextControl
+   */
   init(fontStyle) {
     this.fontStyle = fontStyle;
     this.controlBox.id = 'image_control';
@@ -17,6 +26,10 @@ class TextControl extends Control {
     this.putOldStyles();
   }
 
+  /**
+   * @summary: Put the existing font styles in the control box.
+   * @memberof TextControl
+   */
   putOldStyles() {
     if (this.fontStyle.bold == 'bold') {
       this.boldBtn.classList.add('active');
@@ -32,6 +45,11 @@ class TextControl extends Control {
     this.colorBox.value = this.fontStyle.color;
   }
 
+  /**
+   * @summary: Create controls specific to the text layer like bold,itallic.
+   * Set onclicks for the created buttons.
+   * @memberof TextControl
+   */
   createSpecificControls() {
     this.boldBtn = this.createButton('bold');
     this.boldBtn.onclick = () => {
@@ -62,14 +80,13 @@ class TextControl extends Control {
     this.createFontControls();
   }
 
+  /**
+   * @summary: Create controls related to the font of text like font color,size,family and content.
+   * Style the controls and append to the ControlBox.
+   * Set oninput listener to the created controls
+   * @memberof TextControl
+   */
   createFontControls() {
-    this.textField = document.createElement('input');
-    this.textField.setAttribute('type', 'text');
-    this.textField.setAttribute('title', 'Add Text');
-    this.textField.classList.add('text-field');
-    this.textField.setAttribute('placeholder', 'Add Text');
-    this.controlBox.appendChild(this.textField);
-
     this.selectFontFamily = document.createElement('select');
     this.selectFontFamily.classList.add('font-family-selector');
     this.selectFontFamily.setAttribute('title', 'Font Family');
@@ -103,11 +120,12 @@ class TextControl extends Control {
     this.colorBox.classList.add('color-box');
     this.controlBox.appendChild(this.colorBox);
 
-    this.textField.oninput = () => {
-      this.fontStyle.text = this.textField.value;
-      this.updateStyle();
-      this.setNewText();
-    };
+    this.textField = document.createElement('input');
+    this.textField.setAttribute('type', 'text');
+    this.textField.setAttribute('title', 'Add Text');
+    this.textField.classList.add('text-field');
+    this.textField.setAttribute('placeholder', 'Add Text');
+    this.controlBox.appendChild(this.textField);
 
     this.selectFontFamily.oninput = () => {
       this.fontStyle.fontFamily = this.selectFontFamily.options[
@@ -128,12 +146,26 @@ class TextControl extends Control {
       this.updateStyle();
       this.setNewText();
     };
+
+    this.textField.oninput = () => {
+      this.fontStyle.text = this.textField.value;
+      this.updateStyle();
+      this.setNewText();
+    };
   }
 
+  /**
+   * @summary: Update the fontStyle variable of the text layer with the recently changed values.
+   * @memberof TextControl
+   */
   updateStyle() {
     this.layer.fontStyle = this.fontStyle;
   }
 
+  /**
+   * @summary: Set new text on the text layer.
+   * @memberof TextControl
+   */
   setNewText() {
     //sets font style and colors
     this.layer.editFont();
@@ -145,14 +177,26 @@ class TextControl extends Control {
     this.layerContainer.setActive(this.index);
   }
 
+  /**
+   * @summary: Create options for the select element and append it to the DOM.
+   * @param {Reference} selectContainer - Reference to the select element
+   * @param {String} text - text to put in option
+   * @returns (Reference) - Reference to the option created.
+   * @memberof TextControl
+   */
   createOptions(selectContainer, text) {
-    var option = document.createElement('option');
+    let option = document.createElement('option');
     option.innerText = text;
     option.id = text;
     selectContainer.appendChild(option);
     return option;
   }
 
+  /**
+   * @summary: Obtain the font size and font family from the drop down box.
+   * @returns (String)- String containing the font size and font family for the text layer.
+   * @memberof TextControl
+   */
   getFontStyle() {
     let text = this.selectFontSize.options[this.selectFontSize.selectedIndex].text;
     text = text + ' ' + this.selectFontFamily.options[this.selectFontFamily.selectedIndex].text;
@@ -161,3 +205,4 @@ class TextControl extends Control {
 }
 
 export default TextControl;
+

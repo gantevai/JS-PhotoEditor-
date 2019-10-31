@@ -1,4 +1,9 @@
 import CanvasElement from '../CanvasElement.js';
+
+/**
+ * @summary: Layer class that acts as parent class for ImageLayer and TextLayer class.
+ * @class Layer
+ */
 class Layer {
   element;
   original;
@@ -6,15 +11,35 @@ class Layer {
     this.container = container;
     this.canvas = new CanvasElement(container);
     this.element = this.canvas.element;
+    this.init();
+  }
+
+  /**
+   * @summary: Initializes the variables.
+   * @memberof Layer
+   */
+  init() {
     this.rotationAngle = 0;
     this.isTransforming = false;
     this.degreeToRadian = Math.PI / 180;
   }
 
+  /**
+   *Change Z-index of the layer by invoking a method from CanvasElement class.
+   *
+   * @param {number} zIndex - value to be used as z-index
+   * @memberof Layer
+   */
   changeZindex(zIndex) {
     this.canvas.changeZIndex(zIndex);
   }
 
+  /**
+   * @summary:
+   * Function that sets onclick listener on element to show resizables and execute the callback function
+   * @param {function} clicked - callback funciton received a argument from Editor Class.
+   * @memberof Layer
+   */
   bindClick(clicked) {
     this.element.onclick = () => {
       this.canvas.showresizable();
@@ -22,10 +47,18 @@ class Layer {
     };
   }
 
+  /**
+   * @summary: Hides the resizables by invoking a method from Canvas Element
+   * @memberof Layer
+   */
   hideResizeable() {
     this.canvas.hideresizable();
   }
 
+  /**
+   * @summary: Function to perform left rotation of the layer.
+   * @memberof Layer
+   */
   rotateLeft() {
     if (!this.isTransforming) {
       this.rotationAngle = -90;
@@ -33,6 +66,10 @@ class Layer {
     }
   }
 
+  /**
+   * @summary: Function to perform right rotation of the layer.
+   * @memberof Layer
+   */
   rotateRight() {
     if (!this.isTransforming) {
       this.rotationAngle = 90;
@@ -40,15 +77,25 @@ class Layer {
     }
   }
 
+  /**
+   *
+   * @summary: Function to perform horizontal flip action on the layer.
+   * @memberof Layer
+   */
   flip() {
     if (!this.isTransforming) {
       this.transformImage();
     }
     this.canvas.resizeImage();
   }
+
   /**
-   *
-   * @param {*} rotate - pass true for rotate and false(or nothing) for flip action
+   * @summary: main transformation function used for rotation and flip
+   * For rotation: the image is translated to its center, rotation is done and
+   * then it is translated back to original place
+   * For flip: the image is translated horizontally by its width value, then
+   * scaling is done to flip the pixels and new fliped image is drawn to canvas again.
+   * @param {boolean} rotate - pass true for rotate and false(or nothing) for flip action
    */
   transformImage(rotate) {
     this.isTransforming = true;
@@ -81,6 +128,10 @@ class Layer {
     }.bind(this);
   }
 
+  /**
+   * @summary: Function that removes the layer from the DOM
+   * @memberof Layer
+   */
   removeLayer() {
     this.element.parentElement.remove();
   }

@@ -1,11 +1,22 @@
 import ImageLayer from './layer/imageLayer.js';
 
+/**
+ * @summary:
+ * Class for handling the layer container.
+ * @class LayerContainer
+ */
 class LayerContainer {
   layerOperators;
   constructor() {
     this.container = document.getElementById('layerBody');
   }
 
+  /**
+   * @summary:
+   * Sets the background for the selected layer in the layer box using active class.
+   * @param {*} index
+   * @memberof LayerContainer
+   */
   setActive(index) {
     for (const layerOperator of this.layerOperators) {
       layerOperator.layerDiv.classList.remove('active');
@@ -13,6 +24,12 @@ class LayerContainer {
     this.layerOperators[index].layerDiv.classList.add('active');
   }
 
+  /**
+   * @summary:
+   * Displays all the items in the layers array in the layer container.
+   * @param {Array} layers - array containing the added layers in the editing window.
+   * @memberof LayerContainer
+   */
   displayLayers(layers) {
     this.container.innerHTML = '';
     this.layerOperators = [];
@@ -32,6 +49,10 @@ class LayerContainer {
     this.setOnclicks();
   }
 
+  /**
+   * @summary: Sets onclick listeners for the buttons in the layer container.
+   * @memberof LayerContainer
+   */
   setOnclicks() {
     for (let i = 0; i < this.layerOperators.length; i++) {
       this.layerOperators[i].up.onclick = () => {
@@ -69,12 +90,28 @@ class LayerContainer {
     }
   }
 
+  /**
+   * @summary:
+   * Swaps the elements of array.
+   * @param {Array} arr - array of elements
+   * @param {number} indexA - index of first element
+   * @param {number} indexB - index of second element
+   * @memberof LayerContainer
+   */
   swapArrayElements(arr, indexA, indexB) {
     var temp = arr[indexA];
     arr[indexA] = arr[indexB];
     arr[indexB] = temp;
   }
 
+  /**
+   * @summary:
+   * Creates the layer div in the layer container for particular layer.
+   * @param {context} layer - layer context
+   * @param {number} i - index of the layer in the layers array.
+   * @returns (object) - {layerDiv,up,down,eye,del,thumbnail}
+   * @memberof LayerContainer
+   */
   createLayerDiv(layer, i) {
     const operator = {};
     let layerDiv = (operator.layerDiv = this.docCreateElement('div', 'layer'));
@@ -111,12 +148,24 @@ class LayerContainer {
     return operator;
   }
 
+  /**
+   * @summary:
+   * Creates the element in the html  and adds given class to it.
+   * @param {string} elementToCreate - element type to create like 'div','button',etc.
+   * @param {string} classToAdd - class to be added to the created element.
+   * @returns (element) - instance..
+   * @memberof LayerContainer
+   */
   docCreateElement(elementToCreate, classToAdd) {
     let element = document.createElement(elementToCreate);
     element.classList.add(classToAdd);
     return element;
   }
 
+  /**
+   * @summary: Removes the control box from DOM.
+   * @memberof LayerContainer
+   */
   removeControlBox() {
     const oldControlBox = document.getElementsByClassName('control-box')[0];
     if (oldControlBox) {

@@ -11,6 +11,8 @@ body {
   width: 100%;
   padding: 0 5px;
   /* min-width: 1200px; */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -24,10 +26,13 @@ body {
 
 .editing-container {
   width: 84.9%;
-  background-color: #d5d5d5;
-  height: 91.6vh;
+  /* background-color: #d5d5d5; */
+  background-color: #f2f2f3;
+  height: 89.3vh;
   margin: 5px 0;
   float: left;
+  -webkit-box-shadow: 0px 0px 3px 0px #646464;
+  -moz-box-shadow: 0px 0px 3px 0px #646464;
   box-shadow: 0px 0px 3px 0px #646464;
 }
 
@@ -52,6 +57,8 @@ body {
   top: 5px;
   background-color: #dddddd;
   z-index: 999999;
+  -webkit-box-shadow: 0px 0px 3px 0px #646464;
+  -moz-box-shadow: 0px 0px 3px 0px #646464;
   box-shadow: 0px 0px 3px 0px #646464;
 }
 #image_control button {
@@ -67,13 +74,17 @@ body {
   height: 20px;
   padding: 7px 10px;
 }
+#image_control button img.default {
+  padding: 7px 8px;
+}
 #image_control button:hover {
   background: #b0c8e2;
 }
 
 .active {
   /* background: #c2d5e9; */
-  background-color: #6597cc;
+  background-color: #9dbddf;
+  border: 1px solid #3478c0;
 }
 
 #image_control a {
@@ -108,7 +119,8 @@ body {
   position: absolute;
   bottom: 8.5px;
   right: 5px;
-  /* border: 1px solid black; */
+  -webkit-box-shadow: 0px 0px 3px 0px #646464;
+  -moz-box-shadow: 0px 0px 3px 0px #646464;
   box-shadow: 0px 0px 3px 0px #646464;
 }
 
@@ -149,13 +161,16 @@ body {
   background-position-x: 50%;
   background-size: cover;
   height: 20px;
-  background-image: url(images/eye-icon.png);
+  background-image: url(/images/eye-icon.png);
   -webkit-box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
   box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
 }
 .layer {
   border-bottom: 1px solid darkgray;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   padding: 2px;
 }
 
@@ -174,7 +189,7 @@ body {
 
 .layer-info {
   float: left;
-  width: 58px;
+  width: 55px;
   font-size: 11px;
   padding-left: 5px;
 }

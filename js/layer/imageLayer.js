@@ -1,32 +1,52 @@
-import CanvasElement from '../CanvasElement.js';
 import Layer from './layer.js';
-import ImageControl from '../controls/imageControl.js';
 import Crop from '../Crop.js';
 
+/**
+ * @summary: Class that handles the image layers.
+ * @class ImageLayer
+ * @extends {Layer}
+ */
 class ImageLayer extends Layer {
-  // layerCopy = [];
   constructor(container) {
     super(container);
     this.cropSection;
   }
 
+  /**
+   * @summary: Fills the canvas with image by invoking a method from CanvasElement class.
+   * Keeps a copy of original image for future use.
+   * @param {image} image- image uploaded by the user.
+   * @memberof ImageLayer
+   */
   fillImage(image) {
     this.canvas.handleCanvasSize(image);
     this.original = image;
-    // this.original = new Image();
-    // this.original.src = this.makeCopyImage(image);
   }
 
+  /**
+   * @summary:
+   * Function used to keep copy of image in the layer by invoking a method from CanvasElement class.
+   * @memberof ImageLayer
+   */
   copyLayerImage() {
     this.canvas.createImageCopy();
   }
 
+  /**
+   * @summary: Resets the changes done to image, and displays the original image in the canvas.
+   * @memberof ImageLayer
+   */
   resetChanges() {
     this.canvas.createImageCopy(this.original);
     this.canvas.handleCanvasSize(this.original);
     this.canvas.createImageCopy();
   }
 
+  /**
+   * @summary: Destroy the existing crop area and creates a new crop area on the canvas.
+   * Sets onDoubleClick listener on the crop area.
+   * @memberof ImageLayer
+   */
   crop() {
     if (this.cropSection) {
       this.cropSection.destroy();
@@ -37,8 +57,13 @@ class ImageLayer extends Layer {
     };
   }
 
+  /**
+   * @summary: Handles the crop action
+   * gets the crop area dimensions and applies crop action on the canvas on that area.
+   * @memberof ImageLayer
+   */
   cropImage() {
-    const CROP_DIMENSION = this.cropSection.getCropDimensions(this.canvas);
+    const CROP_DIMENSION = this.cropSection.getCropDimensions();
     this.cropSection.destroy();
     this.cropSection = null;
 
@@ -63,7 +88,12 @@ class ImageLayer extends Layer {
     IMAGE.src = this.canvas.getCanvas().toDataURL();
   }
 
-  filter(imageData) {
+  /**
+   * @summary: Puts the given image data on the canvas by clearing the existing data.
+   * @param {Uint8array} imageData - array of all the pixels of an image.
+   * @memberof ImageLayer
+   */
+  putImage(imageData) {
     this.canvas.context.clearRect(
       0,
       0,
@@ -74,6 +104,11 @@ class ImageLayer extends Layer {
     this.canvas.context.putImageData(imageData, 0, 0);
   }
 
+  /**
+   * @summary: Get the image data on the canvas in the form of Unit8array.
+   * @returns {Uint8array}
+   * @memberof ImageLayer
+   */
   getImageData() {
     const imgWidth = this.canvas.getCanvasSize().width;
     const imgHeight = this.canvas.getCanvasSize().height;

@@ -1,12 +1,22 @@
 import Control from './control.js';
 import CONSTANTS from '../Constants.js';
 import Filter from '../filters/filters.js';
+
+/**
+ * @summary: Class that handles control buttons for image layer
+ * @class ImageControl
+ * @extends {Control}
+ */
 class ImageControl extends Control {
   constructor(layer) {
     super(layer);
     this.init();
   }
 
+  /**
+   * Initialize
+   * @memberof ImageControl
+   */
   init() {
     this.slidersArray = [];
     this.filter = new Filter(this.layer.getImageData());
@@ -16,6 +26,11 @@ class ImageControl extends Control {
     this.createSliderBars();
   }
 
+  /**
+   * @summary: Creates the control buttons specific to the image layer (flip and crop).
+   * Sets onclick for the created buttons.
+   * @memberof ImageControl
+   */
   createSpecificControls() {
     this.createButton('flip').onclick = () => {
       this.layer.flip();
@@ -25,15 +40,21 @@ class ImageControl extends Control {
     };
   }
 
+  /**
+   * @summary: Create Filter Control Div in the DOM
+   * Create Filter Thumbnails as control buttons inside the Filter Div.
+   * Set Onclicks for the filter thumbnails.
+   * @memberof ImageControl
+   */
   createFilterControls() {
     //for heading of filter section
     this.filterDiv = document.createElement('div');
     this.filterDiv.style.cssFloat = 'left';
     this.controlBox.appendChild(this.filterDiv);
-    const filterHeading = document.createElement('div');
-    filterHeading.innerText = 'Filters';
-    filterHeading.classList.add('heading-span');
-    this.filterDiv.appendChild(filterHeading);
+    const FILTER_HEADING = document.createElement('div');
+    FILTER_HEADING.innerText = 'Filters';
+    FILTER_HEADING.classList.add('heading-span');
+    this.filterDiv.appendChild(FILTER_HEADING);
 
     let imageData;
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.ORIGINAL).onclick = () => {
@@ -45,41 +66,47 @@ class ImageControl extends Control {
     };
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.GRAYSCALE).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.GRAYSCALE);
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
       this.layer.copyLayerImage();
     };
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.SEPIA).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.SEPIA);
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
       this.layer.copyLayerImage();
     };
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.CLAREDON).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.CLAREDON);
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
       this.layer.copyLayerImage();
     };
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.LARK).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.LARK);
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
       this.layer.copyLayerImage();
     };
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.MOON).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.MOON);
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
       this.layer.copyLayerImage();
     };
   }
 
+  /**
+   * @summary: Create Manipulator slider bars in the control box.
+   * Create slider Div in the DOM and style it.
+   * Set oninput event listener in the created slider input bars.
+   * @memberof ImageControl
+   */
   createSliderBars() {
     // 'for heading of sliderbar section'
     this.sliderFullBody = document.createElement('div');
     this.sliderFullBody.style.cssFloat = 'left';
     this.controlBox.appendChild(this.sliderFullBody);
-    const sliderHeading = document.createElement('div');
-    sliderHeading.innerText = 'Manipulators';
-    sliderHeading.classList.add('heading-span');
-    sliderHeading.classList.add('manipulators');
-    this.sliderFullBody.appendChild(sliderHeading);
+    const SLIDER_HEADING = document.createElement('div');
+    SLIDER_HEADING.innerText = 'Manipulators';
+    SLIDER_HEADING.classList.add('heading-span');
+    SLIDER_HEADING.classList.add('manipulators');
+    this.sliderFullBody.appendChild(SLIDER_HEADING);
 
     this.sliderBody = document.createElement('div');
     this.sliderBody.style.cssFloat = 'left';
@@ -100,7 +127,7 @@ class ImageControl extends Control {
         this.brightnessSlider.value,
         CONSTANTS.BRIGHTNESS.SLIDER_NAME
       );
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
     };
     this.slidersArray.push({
       slider: this.brightnessSlider,
@@ -118,30 +145,11 @@ class ImageControl extends Control {
         this.contrastSlider.value,
         CONSTANTS.CONTRAST.SLIDER_NAME
       );
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
     };
     this.slidersArray.push({
       slider: this.contrastSlider,
       initial: CONSTANTS.CONTRAST.INITIAL_VALUE
-    });
-
-    this.saturationSlider = this.createSlider(
-      CONSTANTS.SATURATION.SLIDER_NAME,
-      CONSTANTS.SATURATION.MIN_VALUE,
-      CONSTANTS.SATURATION.MAX_VALUE,
-      CONSTANTS.SATURATION.INITIAL_VALUE
-    );
-    this.saturationSlider.setAttribute('step', '0.01');
-    this.saturationSlider.oninput = () => {
-      imageData = this.filter.getManipulatedImageData(
-        this.saturationSlider.value,
-        CONSTANTS.SATURATION.SLIDER_NAME
-      );
-      this.layer.filter(imageData);
-    };
-    this.slidersArray.push({
-      slider: this.saturationSlider,
-      initial: CONSTANTS.SATURATION.INITIAL_VALUE
     });
 
     this.gammaSlider = this.createSlider(
@@ -155,7 +163,7 @@ class ImageControl extends Control {
         this.gammaSlider.value,
         CONSTANTS.GAMMA.SLIDER_NAME
       );
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
     };
     this.slidersArray.push({
       slider: this.gammaSlider,
@@ -173,7 +181,7 @@ class ImageControl extends Control {
         this.temperatureSlider.value,
         CONSTANTS.TEMPERATURE.SLIDER_NAME
       );
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
     };
     this.slidersArray.push({
       slider: this.temperatureSlider,
@@ -191,53 +199,91 @@ class ImageControl extends Control {
         this.vibranceSlider.value,
         CONSTANTS.VIBRANCE.SLIDER_NAME
       );
-      this.layer.filter(imageData);
+      this.layer.putImage(imageData);
     };
     this.slidersArray.push({
       slider: this.vibranceSlider,
       initial: CONSTANTS.VIBRANCE.INITIAL_VALUE
     });
+
+    // this.saturationSlider = this.createSlider(
+    //   CONSTANTS.SATURATION.SLIDER_NAME,
+    //   CONSTANTS.SATURATION.MIN_VALUE,
+    //   CONSTANTS.SATURATION.MAX_VALUE,
+    //   CONSTANTS.SATURATION.INITIAL_VALUE
+    // );
+    // this.saturationSlider.setAttribute('step', '0.01');
+    // this.saturationSlider.oninput = () => {
+    //   imageData = this.filter.getManipulatedImageData(
+    //     this.saturationSlider.value,
+    //     CONSTANTS.SATURATION.SLIDER_NAME
+    //   );
+    //   this.layer.filter(imageData);
+    // };
+    // this.slidersArray.push({
+    //   slider: this.saturationSlider,
+    //   initial: CONSTANTS.SATURATION.INITIAL_VALUE
+    // });
   }
 
+  /**
+   * @summary: Function to create Slider input element,style it and append them.
+   * @param {String} heading - Heading or name for the slider
+   * @param {number} min - minimum value of slider bar
+   * @param {number} max - maximum value of slider bar
+   * @param {number} initialValue - initial value of slider bar
+   * @returns (reference) - Reference of the created slider element.
+   * @memberof ImageControl
+   */
   createSlider(heading, min, max, initialValue) {
-    const sliderDiv = document.createElement('div');
-    sliderDiv.style.textAlign = 'center';
-    sliderDiv.style.cssFloat = 'left';
-    const sliderName = document.createElement('h4');
-    sliderName.innerText = heading;
-    sliderName.classList.add('slider-name');
-    sliderDiv.appendChild(sliderName);
-    const slider = document.createElement('input');
-    slider.setAttribute('type', 'range');
-    slider.setAttribute('min', min);
-    slider.setAttribute('max', max);
-    slider.setAttribute('value', initialValue);
-    slider.classList.add('sliders');
-    sliderDiv.appendChild(slider);
-    this.sliderBody.appendChild(sliderDiv);
-    return slider;
+    const SLIDER_DIV = document.createElement('div');
+    SLIDER_DIV.style.textAlign = 'center';
+    SLIDER_DIV.style.cssFloat = 'left';
+    const SLIDER_NAME = document.createElement('h4');
+    SLIDER_NAME.innerText = heading;
+    SLIDER_NAME.classList.add('slider-name');
+    SLIDER_DIV.appendChild(SLIDER_NAME);
+    const SLIDER = document.createElement('input');
+    SLIDER.setAttribute('type', 'range');
+    SLIDER.setAttribute('min', min);
+    SLIDER.setAttribute('max', max);
+    SLIDER.setAttribute('value', initialValue);
+    SLIDER.classList.add('sliders');
+    SLIDER_DIV.appendChild(SLIDER);
+    this.sliderBody.appendChild(SLIDER_DIV);
+    return SLIDER;
   }
 
+  /**
+   * @summary: reset all the sliders to intial value.
+   * @memberof ImageControl
+   */
   resetSliders() {
     for (let i = 0; i < this.slidersArray.length; i++) {
       this.slidersArray[i].slider.setAttribute('value', this.slidersArray[i].initial);
     }
   }
 
+  /**
+   * @summary: Create filtered thumbnail for the image filter control and appends it to the DOM.
+   * @param {String} filterType - type of the filter
+   * @returns (Reference)- Reference of the created element that contains the created thumbnail.
+   * @memberof ImageControl
+   */
   createFilteredThumbnail(filterType) {
-    const image =
+    const IMAGE =
       filterType == CONSTANTS.FILTER_TYPE.ORIGINAL
         ? this.layer.original
         : this.filter.getImage(filterType, true);
-    const anchor = document.createElement('a');
-    const span = document.createElement('span');
-    span.style.fontWeight = 'bold';
-    span.style.fontSize = '11px';
-    span.innerText = filterType;
-    anchor.appendChild(image);
-    anchor.appendChild(span);
-    this.filterDiv.appendChild(anchor);
-    return anchor;
+    const ANCHOR = document.createElement('a');
+    const SPAN = document.createElement('span');
+    SPAN.style.fontWeight = 'bold';
+    SPAN.style.fontSize = '11px';
+    SPAN.innerText = filterType;
+    ANCHOR.appendChild(IMAGE);
+    ANCHOR.appendChild(SPAN);
+    this.filterDiv.appendChild(ANCHOR);
+    return ANCHOR;
   }
 }
 export default ImageControl;
