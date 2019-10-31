@@ -38,11 +38,11 @@ class LayerContainer {
       this.layerOperators.push(this.createLayerDiv(layers[i], i));
       if (i == 0) {
         let upImage = this.layerOperators[i].up.childNodes[0];
-        upImage.src = '../images/up-arrow-disabled.png';
+        upImage.src = 'images/up-arrow-disabled.png';
       }
       if (i == this.layers.length - 1) {
         let downImage = this.layerOperators[i].down.childNodes[0];
-        downImage.src = '../images/down-arrow-disabled.png';
+        downImage.src = 'images/down-arrow-disabled.png';
       }
     }
 
