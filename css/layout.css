@@ -1,0 +1,215 @@
+body {
+  background-color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+.main-container {
+  width: 100%;
+}
+
+.aligned-wrapper {
+  width: 100%;
+  padding: 0 5px;
+  /* min-width: 1200px; */
+  box-sizing: border-box;
+}
+
+.tools-container {
+  width: 84.9%;
+  background-color: #ffffff;
+  float: left;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.editing-container {
+  width: 84.9%;
+  background-color: #d5d5d5;
+  height: 91.6vh;
+  margin: 5px 0;
+  float: left;
+  box-shadow: 0px 0px 3px 0px #646464;
+}
+
+.filter-container {
+  background-color: black;
+  width: 100%;
+}
+
+.clear-fix:before,
+.clear-fix:after {
+  content: '';
+  display: table;
+}
+.clear-fix:after {
+  clear: both;
+}
+
+#image_control {
+  width: 200px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background-color: #dddddd;
+  z-index: 999999;
+  box-shadow: 0px 0px 3px 0px #646464;
+}
+#image_control button {
+  border: none;
+  outline: none;
+  height: 40px;
+  cursor: pointer;
+  margin: 2px 5px;
+}
+
+#image_control button img {
+  width: 20px;
+  height: 20px;
+  padding: 7px 10px;
+}
+#image_control button:hover {
+  background: #b0c8e2;
+}
+
+.active {
+  /* background: #c2d5e9; */
+  background-color: #6597cc;
+}
+
+#image_control a {
+  width: 90px;
+  float: left;
+  padding: 0px 5px;
+  text-align: center;
+}
+
+#image_control a img {
+  width: 87px;
+  height: 55px;
+  margin: 0 auto;
+  border: 1px solid black;
+  float: left;
+}
+
+#image_control a img:hover {
+  border: 1px solid #0b67ca;
+  cursor: pointer;
+}
+
+#image-layers {
+  width: 144px;
+  background-color: lightgray;
+  border: 1px solid black;
+}
+
+.all-layers {
+  width: 200px;
+  background-color: lightgray;
+  position: absolute;
+  bottom: 8.5px;
+  right: 5px;
+  /* border: 1px solid black; */
+  box-shadow: 0px 0px 3px 0px #646464;
+}
+
+.all-layers-body {
+  width: 100%;
+  height: 140px;
+  overflow: auto;
+  background: #d5d5d5;
+}
+
+.up-down-btns {
+  width: 25px;
+  float: left;
+  height: 30px;
+}
+
+.up-down-btns .up-btn,
+.up-down-btns .down-btn {
+  float: left;
+  height: 15px;
+  width: 100%;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.up-down-btns .up-btn img,
+.up-down-btns .down-btn img {
+  width: 35%;
+  height: 8px;
+}
+
+.eye-btn {
+  float: left;
+  margin: 6px 5px;
+  width: 30px;
+  background-position-x: 50%;
+  background-size: cover;
+  height: 20px;
+  background-image: url(/images/eye-icon.png);
+  -webkit-box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px -1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+.layer {
+  border-bottom: 1px solid darkgray;
+  padding: 2px;
+}
+
+.layer-thumbnails {
+  width: 35px;
+  float: left;
+  margin: 2px 0px;
+  height: 25px;
+  border: 1px solid darkgray;
+}
+.layer-thumbnails img {
+  width: 100%;
+  height: 30px;
+  cursor: pointer;
+}
+
+.layer-info {
+  float: left;
+  width: 58px;
+  font-size: 11px;
+  padding-left: 5px;
+}
+
+.delete-btn {
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.delete-btn img {
+  width: 45%;
+}
+
+.text-field {
+  width: 130px;
+  margin: 5px;
+}
+
+.font-family-selector {
+  width: 87px;
+  margin: 5px;
+}
+
+.font-family-selector option {
+  width: 100%;
+}
+
+.font-size-selector {
+  width: 37px;
+  margin: 5px;
+}
+.color-box {
+  margin: 5px;
+}

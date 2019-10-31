@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/resizers.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="editing-window">
+        <div class="aligned-wrapper clear-fix">
+          <div class="tools-container">
+            <ul class="menu-bar">
+              <li>
+                <a href="#" id="newEditor" title="New Editor"><img src="images/new-editor.png"/></a>
+              </li>
+              <li>
+                <a href="#" id="uploadBtn" title="Add Image"><img src="images/add-image2.png"/></a>
+              </li>
+              <input style="display: none;" type="file" id="fileInputBtn" />
+              <li>
+                <a href="#" id="saveBtn" title="Export"><img src="images/save.png"/></a>
+              </li>
+              <li>
+                <a href="#" id="addTextBtn" title="Add Text"><img src="images/add-text2.png"/></a>
+              </li>
+            </ul>
+          </div>
+          <div class="editing-container" id="editing-container"></div>
+        </div>
+      </div>
+      <div class="filter-container">
+        <div class="aligned-wrapper clear-fix"></div>
+      </div>
+    </div>
+
+    <div id="all-layers clear-fix" class="all-layers">
+      <h4 class="all-layers-heading-span">Layers</h4>
+      <div class="all-layers-body" id="layerBody"></div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

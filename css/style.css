@@ -1,0 +1,89 @@
+.menu-bar {
+  width: 100%;
+  float: left;
+  box-shadow: 0px 0px 2px #646464;
+}
+
+.menu-bar li {
+  float: left;
+  list-style: none;
+}
+
+.menu-bar li a {
+  text-decoration: none;
+  padding: 0 5px;
+  margin: 2px;
+  display: block;
+  color: black;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.menu-bar li a:hover {
+  background: #dde6f0;
+}
+
+.text-input {
+  width: 100%;
+}
+
+li img {
+  width: 30px;
+  height: 30px;
+}
+
+.heading-span,
+.all-layers-heading-span {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+  float: left;
+  width: 100%;
+  background-color: #6d9ed1;
+  border-bottom: 2px solid #ababab;
+  box-sizing: border-box;
+  padding: 3.5px;
+}
+
+/* .all-layers-heading-span {
+  border-bottom: 2px solid #ababab;
+  box-sizing: border-box;
+  margin-bottom: 0;
+} */
+
+.manipulators {
+  margin-top: 5px;
+  padding-bottom: 5px;
+}
+
+.sliders {
+  margin: 8px 7px;
+  width: 170px;
+  background: #111;
+  -webkit-appearance: none;
+  outline: none;
+  height: 1px;
+}
+
+.sliders::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  background: #b0c8e2;
+  cursor: pointer;
+}
+
+.sliders::-moz-range-thumb {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  background: #b0c8e2;
+  cursor: pointer;
+}
+
+.slider-name {
+  font-size: 11px;
+}
