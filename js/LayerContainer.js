@@ -81,7 +81,7 @@ class LayerContainer {
       this.layerOperators[i].eye.onclick = () => {
         if (this.layers[i].element.style.visibility == 'hidden') {
           this.layers[i].element.style.visibility = 'visible';
-          this.layerOperators[i].eye.style.backgroundImage = 'url(../eye-icon.png)';
+          this.layerOperators[i].eye.style.backgroundImage = 'url(./eye-icon.png)';
         } else {
           this.layers[i].element.style.visibility = 'hidden';
           this.layerOperators[i].eye.style.backgroundImage = 'none';
